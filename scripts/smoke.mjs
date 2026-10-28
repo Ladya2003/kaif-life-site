@@ -93,6 +93,41 @@ try{
   await page.close();
   console.log(`PASS viewport ${width}: translated pages, metadata, links and full photograph frames.`);
  }
+ // Check real animation separately from the reduced-motion page checks above.
+ for(const width of [1440,390]){
+  const page=await browser.newPage({viewport:{width,height:1000},reducedMotion:'no-preference'});
+  await page.goto(base,{waitUntil:'networkidle'});
+  const pair=page.locator('[data-pair]').first();
+  const button=pair.locator('button');
+  await pair.locator('img').evaluateAll(async images=>{for(const image of images)image.loading='eager';await Promise.all(images.map(image=>image.decode()));});
+  const frame=pair.locator('.pair-images');
+  const before=await frame.boundingBox();
+  await button.evaluate(element=>{element.click();element.click();element.click();});
+  await page.waitForFunction(()=>document.querySelector('[data-pair]').getAnimations({subtree:true}).some(animation=>animation.playState==='running'));
+  assert.equal(await button.getAttribute('aria-pressed'),'true');
+  assert.equal(await button.getAttribute('aria-disabled'),'true');
+  await pair.screenshot({path:`artifacts/photo-swap-${width}.png`,animations:'allow'});
+  await page.waitForFunction(()=>!document.querySelector('[data-pair]').hasAttribute('aria-busy'));
+  assert(await pair.locator('.pair-second').isVisible());
+  assert(!await pair.locator('.pair-images > img').isVisible());
+  assert.equal(await button.locator('svg[data-icon="arrow-up-right"]').count(),1);
+  const after=await frame.boundingBox();
+  assert(Math.abs(before.width-after.width)<1&&Math.abs(before.height-after.height)<1,'Photo frame remains stable');
+  await button.click();
+  await page.waitForFunction(()=>document.querySelector('[data-pair]').getAnimations({subtree:true}).some(animation=>animation.playState==='running'));
+  await page.waitForFunction(()=>!document.querySelector('[data-pair]').hasAttribute('aria-busy'));
+  assert.equal(await button.getAttribute('aria-pressed'),'false');
+  assert(await pair.locator('.pair-images > img').isVisible());
+  assert(!await pair.locator('.pair-second').isVisible());
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await button.click();
+  await page.waitForFunction(()=>!document.querySelector('[data-pair]').hasAttribute('aria-busy'));
+  assert.equal(await button.getAttribute('aria-pressed'),'true');
+  assert.equal(await pair.evaluate(element=>element.getAnimations({subtree:true}).length),0);
+  assert.equal(await button.getAttribute('aria-disabled'),null);
+  await page.close();
+ }
+ console.log('PASS photo animation: forward, reverse, rapid clicks, stable frame, preserved SVG, reduced motion.');
  for(const locale of locales){
   const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
   await page.goto(base+localize(locale,'/stories/georgia-first-days/'));

@@ -12,10 +12,68 @@ const t=translate(locale);
 </figure>
 <script>
  document.querySelectorAll<HTMLElement>('[data-pair]').forEach(pair=>{
- const button=pair.querySelector<HTMLButtonElement>('button')!;
- const second=pair.querySelector<HTMLElement>('.pair-second')!;
- const label=button.querySelector<HTMLElement>('[data-pair-label]')!;
- button.hidden=false;
- button.addEventListener('click',()=>{const active=button.getAttribute('aria-pressed')!=='true';button.setAttribute('aria-pressed',String(active));second.hidden=!active;label.textContent=(active?button.dataset.restore:button.dataset.reveal)!;});
+  const button=pair.querySelector<HTMLButtonElement>('button')!;
+  const first=pair.querySelector<HTMLImageElement>('.pair-images > img')!;
+  const second=pair.querySelector<HTMLElement>('.pair-second')!;
+  const label=button.querySelector<HTMLElement>('[data-pair-label]')!;
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+  let switching=false;
+  button.hidden=false;
+
+  button.addEventListener('click',async()=>{
+   if(switching)return;
+   switching=true;
+   button.setAttribute('aria-disabled','true');
+   pair.setAttribute('aria-busy','true');
+   const active=button.getAttribute('aria-pressed')!=='true';
+   const incoming=active?second:first;
+   const outgoing=active?first:second;
+   const incomingImage=active?second.querySelector<HTMLImageElement>('img')!:first;
+   const animations:Animation[]=[];
+
+   try{
+    // Decode the next photo before revealing it, including on a slow connection.
+    incomingImage.loading='eager';
+    await incomingImage.decode();
+    incoming.hidden=false;
+    incoming.style.zIndex='2';
+    outgoing.style.zIndex='1';
+    incoming.removeAttribute('aria-hidden');
+    outgoing.setAttribute('aria-hidden','true');
+    button.setAttribute('aria-pressed',String(active));
+    label.textContent=(active?button.dataset.restore:button.dataset.reveal)!;
+
+    if(!reducedMotion.matches&&typeof incoming.animate==='function'){
+     const direction=active?1:-1;
+     incoming.style.willChange='transform, opacity';
+     outgoing.style.willChange='transform, opacity';
+     const options:KeyframeAnimationOptions={duration:420,easing:'cubic-bezier(0.22, 1, 0.36, 1)',fill:'both'};
+     animations.push(
+      outgoing.animate([
+       {opacity:1,transform:'translateX(0) rotate(0) scale(1)'},
+       {opacity:0,transform:`translateX(${-direction*4}%) rotate(${-direction*2}deg) scale(0.96)`},
+      ],options),
+      incoming.animate([
+       {opacity:0,transform:`translateX(${direction*7}%) rotate(${direction*3}deg) scale(1.04)`},
+       {opacity:1,transform:'translateX(0) rotate(0) scale(1)'},
+      ],options),
+     );
+     await Promise.all(animations.map(animation=>animation.finished.catch(()=>{})));
+    }
+    first.hidden=active;
+    second.hidden=!active;
+   }catch{
+    // Keep the current photo if loading the next image fails.
+   }finally{
+    animations.forEach(animation=>animation.cancel());
+    for(const layer of [first,second]){
+     layer.style.removeProperty('z-index');
+     layer.style.removeProperty('will-change');
+    }
+    pair.removeAttribute('aria-busy');
+    button.removeAttribute('aria-disabled');
+    switching=false;
+   }
+  });
  });
 </script>

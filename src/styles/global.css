@@ -92,3 +92,8 @@ a,button{transition:color .3s ease,background-color .3s ease,border-color .3s ea
 .ticker>div{display:flex;align-items:center;word-spacing:normal}
 .ticker-item{display:inline-flex;align-items:center;flex-shrink:0;gap:24px;padding-right:24px}
 .ticker .icon{width:18px;height:18px}
+
+/* Keep the photo swap inside its frame; no layout movement during the animation. */
+.pair-images{isolation:isolate;background:var(--paper)}
+.pair-images>img{position:relative}
+.pair-toggle[aria-disabled="true"]{cursor:progress}
