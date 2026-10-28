@@ -42,6 +42,7 @@ try{
     if(path==='/stories/'){assert.equal(await page.locator('.story-card').count(),5);}
     if(path.startsWith('/stories/car-challenge-')){assert.equal(await page.locator('.article-media').count(),4);for(const media of await page.locator('.article-media img').all())await media.evaluate(img=>img.loading='eager');}
     if(path==='/stories/car-challenge-ab-tests/'){assert.equal(await page.locator('.prose tbody tr').count(),3);}
+    assert(!/[↗↖↓←✳♡▷💤]/u.test(text),`No platform-dependent icon characters: ${route}`);
     assert(!/[?]{3}/.test(text),`No encoding damage: ${route}`);
     if(locale!=='ru')assert(!/[А-Яа-яЁё]/.test(text),`Fully translated body: ${route}`);
     const canonical=site+route;
@@ -70,10 +71,10 @@ try{
     for(const pair of await page.locator('[data-pair]').all()){
      const button=pair.locator('button');
      if(isArticle){await checkImageFrame(pair.locator('.pair-images > img'),route);const gap=await pair.evaluate(el=>el.querySelector('figcaption').getBoundingClientRect().top-el.querySelector('.pair-images').getBoundingClientRect().bottom);assert(gap<30,`No blank space after photograph: ${route}`);}
-     await button.click();assert.equal(await button.getAttribute('aria-pressed'),'true');assert(await pair.locator('.pair-second').isVisible());
+     await button.click();assert.equal(await button.getAttribute('aria-pressed'),'true');assert.equal(await button.locator('svg[data-icon="arrow-up-right"]').count(),1);assert(await pair.locator('.pair-second').isVisible());
      if(isArticle)await checkImageFrame(pair.locator('.pair-second img'),route+' second');
      if(isArticle&&width===1440)await pair.screenshot({path:`artifacts/article-pair-${locale}.png`});
-     await button.click();assert.equal(await button.getAttribute('aria-pressed'),'false');assert(!await pair.locator('.pair-second').isVisible());
+     await button.click();assert.equal(await button.getAttribute('aria-pressed'),'false');assert.equal(await button.locator('svg[data-icon="arrow-up-right"]').count(),1);assert(!await pair.locator('.pair-second').isVisible());
     }
     if(isArticle)await checkImageFrame(page.locator('.article-cover img'),route+' cover');
     if(path.startsWith('/stories/car-challenge-')){

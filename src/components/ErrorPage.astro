@@ -1,7 +1,8 @@
 ---
+import Icon from './Icon.astro';
 import Layout from '../layouts/Layout.astro';
 import {translate,localizedPath,type Locale} from '../i18n';
 interface Props{locale?:Locale;}
 const {locale='ru'}=Astro.props;const t=translate(locale);
 ---
-<Layout locale={locale} title={t('error.title')} description={t('error.body')} noindex><section class="section wrap not-found"><p class="eyebrow">{t('error.eyebrow')}</p><h1>{t('error.title1')}<br/><span class="serif orange">{t('error.accent')}</span></h1><p class="lead">{t('error.body')}</p><a class="button" href={localizedPath(locale)}>{t('error.back')} ↗</a></section></Layout>
+<Layout locale={locale} title={t('error.title')} description={t('error.body')} noindex><section class="section wrap not-found"><p class="eyebrow">{t('error.eyebrow')}</p><h1>{t('error.title1')}<br/><span class="serif orange">{t('error.accent')}</span></h1><p class="lead">{t('error.body')}</p><a class="button" href={localizedPath(locale)}>{t('error.back')} <Icon name="arrow-up-right"/></a></section></Layout>

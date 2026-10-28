@@ -81,3 +81,14 @@ a,button{transition:color .3s ease,background-color .3s ease,border-color .3s ea
 @media(max-width:700px){.prose th,.prose td{padding:12px 8px}.prose table{font-size:14px}}
 
 @media(max-width:700px){.article-header h1{font-size:clamp(34px,10vw,44px);overflow-wrap:anywhere}}
+
+/* Inline SVG icons keep the same shape and colour on every platform. */
+.icon{display:inline-block;flex-shrink:0;vertical-align:-.15em;width:1em;height:1em;overflow:visible}
+.logo-flower{display:inline-flex;align-items:center}
+.text-link>.icon,.pair-toggle>.icon,.footer a>.icon{margin-inline-start:.35em}
+.hero-actions .text-link>.icon:first-child{margin-inline-start:0;margin-inline-end:.35em}
+.button>span{display:inline-flex;align-items:center;gap:8px}
+.footer-heading>.icon{color:#f58a5b}
+.ticker>div{display:flex;align-items:center;word-spacing:normal}
+.ticker-item{display:inline-flex;align-items:center;flex-shrink:0;gap:24px;padding-right:24px}
+.ticker .icon{width:18px;height:18px}

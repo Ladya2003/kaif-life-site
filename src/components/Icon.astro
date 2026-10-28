@@ -1,0 +1,16 @@
+---
+type IconName = 'arrow-up-right' | 'arrow-up-left' | 'arrow-down' | 'arrow-left' | 'play' | 'spark' | 'heart' | 'sleep';
+interface Props { name: IconName; class?:string; }
+const {name,class:className}=Astro.props;
+const paths:Record<IconName,string[]>={
+ 'arrow-up-right':['M6 18 18 6','M6 6h12v12'],
+ 'arrow-up-left':['m18 18-12-12','M18 6H6v12'],
+ 'arrow-down':['M12 4v16','m5 13 7 7 7-7'],
+ 'arrow-left':['M20 12H4','m11 5-7 7 7 7'],
+ play:['m8 5 11 7-11 7V5Z'],
+ spark:['M12 2v20M2 12h20M5 5l14 14M5 19 19 5'],
+ heart:['M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z'],
+ sleep:['M3 13h7l-7 8h7','M12 7h5l-5 6h5','M18 2h4l-4 5h4'],
+};
+---
+<svg class:list={['icon',className]} data-icon={name} viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{paths[name].map(d=><path d={d}/>)}</svg>

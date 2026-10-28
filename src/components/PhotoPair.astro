@@ -1,5 +1,6 @@
 ---
 import Photo from './Photo.astro';
+import Icon from './Icon.astro';
 import { translate, type Locale } from '../i18n';
 interface Props { first:string; second:string; alt:string; secondAlt:string; caption:string; eager?:boolean; locale?:Locale; }
 const {first,second,alt,secondAlt,caption,eager=false,locale='ru'}=Astro.props;
@@ -7,13 +8,14 @@ const t=translate(locale);
 ---
 <figure class="photo-pair" data-pair>
  <div class="pair-images"><Photo id={first} alt={alt} eager={eager}/><div class="pair-second" hidden><Photo id={second} alt={secondAlt}/></div></div>
- <figcaption><span>{caption}</span><button class="pair-toggle" type="button" aria-pressed="false" data-reveal={`${t('pair.reveal')} ↗`} data-restore={`${t('pair.restore')} ↗`} hidden>{t('pair.reveal')} ↗</button></figcaption>
+ <figcaption><span>{caption}</span><button class="pair-toggle" type="button" aria-pressed="false" data-reveal={t('pair.reveal')} data-restore={t('pair.restore')} hidden><span data-pair-label>{t('pair.reveal')}</span> <Icon name="arrow-up-right"/></button></figcaption>
 </figure>
 <script>
  document.querySelectorAll<HTMLElement>('[data-pair]').forEach(pair=>{
  const button=pair.querySelector<HTMLButtonElement>('button')!;
  const second=pair.querySelector<HTMLElement>('.pair-second')!;
+ const label=button.querySelector<HTMLElement>('[data-pair-label]')!;
  button.hidden=false;
- button.addEventListener('click',()=>{const active=button.getAttribute('aria-pressed')!=='true';button.setAttribute('aria-pressed',String(active));second.hidden=!active;button.textContent=(active?button.dataset.restore:button.dataset.reveal)!;});
+ button.addEventListener('click',()=>{const active=button.getAttribute('aria-pressed')!=='true';button.setAttribute('aria-pressed',String(active));second.hidden=!active;label.textContent=(active?button.dataset.restore:button.dataset.reveal)!;});
  });
 </script>
