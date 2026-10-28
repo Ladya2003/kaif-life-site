@@ -1,0 +1,7 @@
+---
+import StoryArticle from '../../../components/StoryArticle.astro';
+import {storySlugs} from '../../../i18n/content';
+export function getStaticPaths(){return (['en','es'] as const).flatMap(locale=>storySlugs.map(slug=>({params:{locale,slug},props:{locale,slug}})));}
+const {locale,slug}=Astro.props;
+---
+<StoryArticle locale={locale} slug={slug}/>

@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+import { getSocials } from '../i18n/content';
+import { translate, locales, localizedPath, unlocalizedPath, ogLocales, languageNames, type Locale } from '../i18n';
+interface Props { locale?:Locale; title?:string; description?:string; image?:string; article?:boolean; noindex?:boolean; articleSection?:string; articleImages?:string[]; }
+const {locale='ru', image='/images/og.jpg',article=false,noindex=false}=Astro.props;
+const t=translate(locale);
+const title=Astro.props.title ?? t('site.title');
+const description=Astro.props.description ?? t('site.description');
+const socials=getSocials(locale);
+const path=unlocalizedPath(Astro.url.pathname);
+const canonical=new URL(Astro.url.pathname,Astro.site).href;
+const imageUrl=new URL(image,Astro.site).href;
+const root=Astro.site!.href;
+const personId=`${root}#vlad`;
+const isHome=path==='/';
+const isStory=path.startsWith('/stories/') && path!=='/stories/';
+const pageType=article||isHome?'WebPage':'CollectionPage';
+const imageId=`${canonical}#image`;
+const articleImages=(Astro.props.articleImages ?? [image]).map(path=>new URL(path,root).href);
+const breadcrumbItems=[{name:t('nav.home'),path:localizedPath(locale)},...(!isHome?[{name:t('nav.stories'),path:localizedPath(locale,'/stories/')}]:[]),...(isStory?[{name:title.replace(/ — KAIF LIFE$/,''),path:Astro.url.pathname}]:[])];
+const graph=[
+ {'@type':'Person','@id':personId,name:t('site.name'),url:new URL(localizedPath(locale,'/#about'),root).href,jobTitle:t('site.job'),sameAs:[...socials.map(s=>s.url),'https://www.linkedin.com/in/vladislav-vakulenchik-67a3a8279/']},
+ {'@type':'WebSite','@id':`${root}#website`,url:root,name:'KAIF LIFE',inLanguage:[...locales],creator:{'@id':personId}},
+ {'@type':'ImageObject','@id':imageId,url:imageUrl,contentUrl:imageUrl,width:1200,height:630,caption:title},
+ {'@type':pageType,'@id':`${canonical}#page`,url:canonical,name:title,description,inLanguage:locale,primaryImageOfPage:{'@id':imageId},isPartOf:{'@id':`${root}#website`}},
+ ...(article?[{'@type':'BlogPosting','@id':`${canonical}#article`,url:canonical,headline:title.replace(/ — KAIF LIFE$/,''),description,inLanguage:locale,articleSection:Astro.props.articleSection,author:{'@id':personId},publisher:{'@id':personId},mainEntityOfPage:canonical,isPartOf:{'@id':`${root}#website`},image:articleImages}]:[]),
+ ...(!noindex?[{'@type':'BreadcrumbList',itemListElement:breadcrumbItems.map((item,i)=>({'@type':'ListItem',position:i+1,name:item.name,item:new URL(item.path,root).href}))}]:[])
+];
+---
+<!doctype html>
+<html lang={locale}><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#f5f1e8"/><title>{title}</title><meta name="description" content={description}/><meta name="robots" content={noindex?'noindex, follow':'index, follow, max-image-preview:large'}/><link rel="canonical" href={canonical}/>{!noindex && <>{locales.map(lang=><link rel="alternate" hreflang={lang} href={new URL(localizedPath(lang,path),root)}/>)}<link rel="alternate" hreflang="x-default" href={new URL(path,root)}/></>}<link rel="icon" type="image/svg+xml" href="/favicon.svg"/><meta property="og:type" content={article?'article':'website'}/><meta property="og:locale" content={ogLocales[locale]}/>{locales.filter(lang=>lang!==locale).map(lang=><meta property="og:locale:alternate" content={ogLocales[lang]}/>)}<meta property="og:site_name" content="KAIF LIFE"/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={imageUrl}/><meta property="og:image:alt" content={title}/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/><meta property="og:image:type" content="image/jpeg"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={title}/><meta name="twitter:description" content={description}/><meta name="twitter:image" content={imageUrl}/><meta name="twitter:image:alt" content={title}/><meta name="author" content={t('site.name')}/>{article && <meta property="article:author" content={new URL(localizedPath(locale,'/#about'),root)}/>}{!noindex && <script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@graph':graph}).replace(/</g,'\\u003c')}/>}</head>
+<body><a class="skip-link" href="#main">{t('nav.skip')}</a>
+<header class="site-header wrap"><a class="logo" href={localizedPath(locale)} aria-label={`KAIF LIFE — ${t('nav.home')}`}>KAIF<span class="logo-flower" aria-hidden="true">✳</span>LIFE<span class="logo-dot">.</span></a><nav aria-label={t('nav.label')}><a href={localizedPath(locale,'/stories/')}>{t('nav.stories')}</a><a href={localizedPath(locale,'/#about')}>{t('nav.about')}</a><a href={localizedPath(locale,'/#amorely')}>Amorely</a></nav><div class="header-tools"><div class="language-switch" role="navigation" aria-label={t('nav.languages')}>{locales.map(lang=><a href={localizedPath(lang,noindex?'/':path)} lang={lang} hreflang={lang} aria-label={languageNames[lang]} aria-current={lang===locale?'page':undefined}>{lang.toUpperCase()}</a>)}</div><a class="header-cta" href="https://www.youtube.com/@all-life-is-kaif" target="_blank" rel="noopener noreferrer">{t('nav.youtube')} <span aria-hidden="true">↗</span></a></div></header>
+<main id="main"><slot/></main>
+<footer class="footer" id="contact"><div class="wrap"><p class="eyebrow">{t('footer.eyebrow')}</p><div class="footer-heading">{t('footer.title1')}<br/>{t('footer.title2')} <span aria-hidden="true">↗</span></div><div class="footer-bottom"><div><a class="contact" href="https://t.me/valdemart" target="_blank" rel="noopener noreferrer">{t('footer.contact')} ↗</a><a class="email" href="mailto:vlad.vakulenchikk@gmail.com">vlad.vakulenchikk@gmail.com</a></div><div class="footer-socials">{socials.map(s=><a href={s.url} target="_blank" rel="noopener noreferrer">{s.name} ↗</a>)}</div></div><div class="colophon"><a class="logo" href={localizedPath(locale)}>KAIF LIFE.</a><span>© {new Date().getFullYear()} {t('footer.copyright')}</span><a href="https://amorely.love/" target="_blank" rel="noopener noreferrer">{t('footer.amorely')} ↗</a></div></div></footer>
+</body></html>

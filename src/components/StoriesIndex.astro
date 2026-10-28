@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Photo from './Photo.astro';
+import { getStories } from '../i18n/content';
+import { translate, localizedPath, type Locale } from '../i18n';
+interface Props {locale?:Locale;}
+const {locale='ru'}=Astro.props;
+const t=translate(locale), stories=getStories(locale);
+---
+<Layout locale={locale} title={t('index.title')} description={t('index.description')}><section class="wrap section journal-page"><nav class="breadcrumbs" aria-label={t('nav.label')}><a href={localizedPath(locale)}>{t('nav.home')}</a><span aria-hidden="true">/</span><span aria-current="page">{t('nav.stories')}</span></nav><p class="eyebrow">{t('index.eyebrow')}</p><h1>{t('index.title1')}<br/><span class="serif orange">{t('index.accent')}</span></h1><p class="lead">{t('index.intro')}</p><div class="stories-grid">{stories.map((s,i)=><a class:list={["story-card",{"story-landscape":s.slug.startsWith("car-challenge-")}]} href={localizedPath(locale,`/stories/${s.slug}/`)}><div class="story-image"><Photo id={s.image} alt={s.alt}/><span class="story-number">0{i+1}</span><span class="round-arrow">↗</span></div><div class="card-meta">{s.label}<span>{s.time} {t('journal.reading')}</span></div><h2>{s.title}</h2><p>{s.description}</p></a>)}</div></section></Layout>

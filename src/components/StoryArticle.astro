@@ -1,0 +1,21 @@
+---
+import Article from '../layouts/Article.astro';
+import Photo from './Photo.astro';
+import PhotoPair from './PhotoPair.astro';
+import {getArticle,type StorySlug} from '../i18n/content';
+import {translate,type Locale} from '../i18n';
+import mediaByLocale from '../i18n/media.json';
+interface Props {slug:StorySlug;locale?:Locale;}
+const {slug,locale='ru'}=Astro.props;
+const t=translate(locale), story=getArticle(locale,slug);
+const blocks=story.body.split(/(\[pair\]|\[landscape\]|\[sleep\]|\[media:\d+\])/g).map(value=>{
+ const match=value.match(/^\[media:(\d+)\]$/);
+ const image=match?.[1];
+ const media=image?mediaByLocale[locale][image as keyof typeof mediaByLocale.ru]:undefined;
+ if(image&&!media) throw new Error(`Missing media caption: ${locale}/${image}`);
+ return {value,image,media};
+});
+---
+<Article locale={locale} title={story.title} description={story.description} image={story.image} alt={story.alt} label={story.label} video={story.video}>
+{blocks.map(({value:block,image,media})=>image&&media?<figure class="article-media"><a href={`/images/${image}-1440.webp`} target="_blank" rel="noopener noreferrer" aria-label={media.alt}><Photo id={image} alt={media.alt} sizes="(max-width: 800px) 95vw, 720px"/></a><figcaption>{media.caption}</figcaption></figure>:block==='[pair]'?<PhotoPair locale={locale} first="15" second="17" alt={t('article.pairAlt')} secondAlt={t('article.pairSecondAlt')} caption={t('article.pairCaption')}/>:block==='[landscape]'?<figure><Photo id="21" alt={t('article.landscapeAlt')}/><figcaption>{t('article.landscapeCaption')}</figcaption></figure>:block==='[sleep]'?<figure class="portrait-inline"><Photo id="20" alt={t('moments.sleepAlt')}/><figcaption>{t('article.sleepCaption')}</figcaption></figure>:<Fragment set:html={block}/>)}
+</Article>

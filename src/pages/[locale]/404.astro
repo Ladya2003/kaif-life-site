@@ -1,0 +1,6 @@
+---
+import ErrorPage from '../../components/ErrorPage.astro';
+export function getStaticPaths(){return (['en','es'] as const).map(locale=>({params:{locale},props:{locale}}));}
+const {locale}=Astro.props;
+---
+<ErrorPage locale={locale}/>

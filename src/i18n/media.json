@@ -1,0 +1,104 @@
+{
+  "ru": {
+    "27": {
+      "alt": "Первый отчёт A/B-теста с тремя вариантами названия и обложки",
+      "caption": "Первый A/B-тест. Доли времени просмотра: 29%, 36,1% и 34,9%."
+    },
+    "28": {
+      "alt": "Три сочетания названия и превью, подготовленные ко второму A/B-тесту",
+      "caption": "Второй раунд: подготовленные сочетания заголовков и обложек."
+    },
+    "29": {
+      "alt": "Готовый таймлайн автомобильного челленджа в DaVinci Resolve",
+      "caption": "Готовый таймлайн в DaVinci Resolve. Больше тридцати часов работы."
+    },
+    "30": {
+      "alt": "Превью автомобильного челленджа: крупная эмоция Влада и красная машина",
+      "caption": "Один из двух вариантов, которые мне сейчас нравятся больше всего."
+    },
+    "31": {
+      "alt": "Превью автомобильного челленджа с Владом, Лёхой и надписью «Успеть за 3 часа»",
+      "caption": "Второй любимый вариант: мы с Лёхой и ограничение в три часа."
+    },
+    "32": {
+      "alt": "Влад и Лёха впервые сидят в кабриолете и удивляются",
+      "caption": "Первый раз в кабриолете. Наши реакции говорят сами за себя."
+    },
+    "33": {
+      "alt": "Влад и Лёха улыбаются во время поездки в кабриолете",
+      "caption": "Звук, ветер и эмоции. Настоящий кадр из выпуска."
+    },
+    "34": {
+      "alt": "Влад и Лёха пожимают друг другу руки в конце автомобильного челленджа",
+      "caption": "Рукопожатие в финале. Длинный съёмочный день позади."
+    }
+  },
+  "en": {
+    "27": {
+      "alt": "First A/B test report comparing three title-and-thumbnail options",
+      "caption": "First A/B test. Watch-time shares: 29%, 36.1% and 34.9%."
+    },
+    "28": {
+      "alt": "Three title-and-thumbnail combinations prepared for the second A/B test",
+      "caption": "Round two: the title-and-thumbnail combinations prepared for comparison."
+    },
+    "29": {
+      "alt": "The completed car challenge timeline in DaVinci Resolve",
+      "caption": "The finished DaVinci Resolve timeline. Over thirty hours of editing."
+    },
+    "30": {
+      "alt": "Car challenge thumbnail with Vlad’s close-up reaction and a red car",
+      "caption": "One of my two current favourite thumbnail options."
+    },
+    "31": {
+      "alt": "Car challenge thumbnail with Vlad, Lyokha and a Russian three-hour challenge headline",
+      "caption": "My other current favourite: Lyokha and me, with the three-hour limit."
+    },
+    "32": {
+      "alt": "Vlad and Lyokha reacting to sitting in a convertible for the first time",
+      "caption": "First time in the convertible. Our reactions say it all."
+    },
+    "33": {
+      "alt": "Vlad and Lyokha smiling during a convertible ride",
+      "caption": "Sound, wind and excitement. A real frame from the episode."
+    },
+    "34": {
+      "alt": "Vlad and Lyokha shaking hands at the end of the car challenge",
+      "caption": "A final handshake. A long filming day behind us."
+    }
+  },
+  "es": {
+    "27": {
+      "alt": "Primer informe de prueba A/B con tres combinaciones de título y miniatura",
+      "caption": "Primera prueba A/B. Porcentajes del tiempo de visualización: 29%, 36,1% y 34,9%."
+    },
+    "28": {
+      "alt": "Tres combinaciones de título y miniatura preparadas para la segunda prueba A/B",
+      "caption": "Segunda ronda: combinaciones de títulos y miniaturas listas para comparar."
+    },
+    "29": {
+      "alt": "Línea de tiempo terminada del reto de coches en DaVinci Resolve",
+      "caption": "La línea de tiempo final en DaVinci Resolve. Más de treinta horas de edición."
+    },
+    "30": {
+      "alt": "Miniatura del reto de coches con la reacción de Vlad y un coche rojo",
+      "caption": "Una de mis dos miniaturas favoritas por ahora."
+    },
+    "31": {
+      "alt": "Miniatura del reto de coches con Vlad, Lyokha y un texto ruso sobre el límite de tres horas",
+      "caption": "Mi otra favorita: Lyokha y yo, con el límite de tres horas."
+    },
+    "32": {
+      "alt": "Vlad y Lyokha reaccionan al subir por primera vez a un descapotable",
+      "caption": "Primera vez en el descapotable. Nuestras reacciones lo dicen todo."
+    },
+    "33": {
+      "alt": "Vlad y Lyokha sonríen durante un paseo en descapotable",
+      "caption": "Sonido, viento y emoción. Un fotograma real del episodio."
+    },
+    "34": {
+      "alt": "Vlad y Lyokha se dan la mano al final del reto de coches",
+      "caption": "Un apretón de manos al final. Atrás queda un largo día de grabación."
+    }
+  }
+}

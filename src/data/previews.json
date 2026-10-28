@@ -1,0 +1,32 @@
+{
+  "georgia-first-days": {
+    "social": "/images/previews/georgia-first-days-social.jpg",
+    "16x9": "/images/previews/georgia-first-days-16x9.jpg",
+    "4x3": "/images/previews/georgia-first-days-4x3.jpg",
+    "1x1": "/images/previews/georgia-first-days-1x1.jpg"
+  },
+  "georgia-excursions": {
+    "social": "/images/previews/georgia-excursions-social.jpg",
+    "16x9": "/images/previews/georgia-excursions-16x9.jpg",
+    "4x3": "/images/previews/georgia-excursions-4x3.jpg",
+    "1x1": "/images/previews/georgia-excursions-1x1.jpg"
+  },
+  "kazbegi-paragliding": {
+    "social": "/images/previews/kazbegi-paragliding-social.jpg",
+    "16x9": "/images/previews/kazbegi-paragliding-16x9.jpg",
+    "4x3": "/images/previews/kazbegi-paragliding-4x3.jpg",
+    "1x1": "/images/previews/kazbegi-paragliding-1x1.jpg"
+  },
+  "car-challenge-behind-the-scenes": {
+    "social": "/images/previews/car-challenge-behind-the-scenes-social.jpg",
+    "16x9": "/images/previews/car-challenge-behind-the-scenes-16x9.jpg",
+    "4x3": "/images/previews/car-challenge-behind-the-scenes-4x3.jpg",
+    "1x1": "/images/previews/car-challenge-behind-the-scenes-1x1.jpg"
+  },
+  "car-challenge-ab-tests": {
+    "social": "/images/previews/car-challenge-ab-tests-social.jpg",
+    "16x9": "/images/previews/car-challenge-ab-tests-16x9.jpg",
+    "4x3": "/images/previews/car-challenge-ab-tests-4x3.jpg",
+    "1x1": "/images/previews/car-challenge-ab-tests-1x1.jpg"
+  }
+}

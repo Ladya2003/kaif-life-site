@@ -1,0 +1,7 @@
+---
+import dimensions from '../data/images.json';
+interface Props { id: string; alt: string; eager?: boolean; class?: string; sizes?: string; }
+const {id,alt,eager=false,class:className,sizes='(max-width: 700px) 90vw, 45vw'}=Astro.props;
+const size = dimensions[id as keyof typeof dimensions];
+---
+<img width={size.width} height={size.height} class={className} src={`/images/${id}-960.webp`} srcset={`/images/${id}-480.webp 480w, /images/${id}-960.webp 960w, /images/${id}-1440.webp 1440w`} sizes={sizes} alt={alt} loading={eager?'eager':'lazy'} decoding="async" fetchpriority={eager?'high':'auto'} />
