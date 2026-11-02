@@ -29,6 +29,9 @@ for(const locale of locales){
   assert(!/<main[^>]*(?:hidden|display\s*:\s*none)/i.test(html));
   assert(!main.includes('[media:'));
   if(route==='/'){
+   assert(main.indexOf('id="beginning"')<main.indexOf('id="journal"'),'Origin precedes the journal');
+   for(const id of ['9g-v7WGinxE','Bvl6rGsDn-A','SoTk56Auc7s','xoy-ks5NtEU','FLn9T8HfdJA','hFZJrFvkLsE'])assert(main.includes(`https://youtu.be/${id}`),`Origin video in static HTML: ${id}`);
+   for(const id of ['childhood-computer','graduation-diploma','graduation-friends','graduation-outtake'])assert(main.includes(`/images/${id}-960.webp`),`Distinct origin asset: ${id}`);
    const cards=[...main.matchAll(/<a\b[^>]*class="story-card[^"]*"[^>]*href="([^"]+)"/g)].map(match=>match[1]);
    assert.deepEqual(cards,['georgia-first-days','georgia-excursions','kazbegi-paragliding'].map(slug=>localize(locale,`/stories/${slug}/`)),`Original home stories: ${locale}`);
   }

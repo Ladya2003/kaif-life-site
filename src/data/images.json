@@ -126,5 +126,21 @@
   "34": {
     "width": 960,
     "height": 551
+  },
+  "childhood-computer": {
+    "width": 1280,
+    "height": 960
+  },
+  "graduation-diploma": {
+    "width": 4284,
+    "height": 5712
+  },
+  "graduation-friends": {
+    "width": 4284,
+    "height": 5712
+  },
+  "graduation-outtake": {
+    "width": 4284,
+    "height": 5712
   }
 }

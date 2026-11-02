@@ -12,7 +12,7 @@ const server=spawn(process.execPath,['node_modules/astro/bin/astro.mjs','preview
 let browser;
 
 async function checkImageFrame(image,label){
- const dimensions=await image.evaluate(img=>({width:img.getBoundingClientRect().width,height:img.getBoundingClientRect().height,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,maxHeight:getComputedStyle(img).maxHeight}));
+ const dimensions=await image.evaluate(img=>({width:parseFloat(getComputedStyle(img).width),height:parseFloat(getComputedStyle(img).height),naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,maxHeight:getComputedStyle(img).maxHeight}));
  assert(dimensions.naturalWidth>0,`Image loaded: ${label}`);
  assert(Math.abs(dimensions.height-dimensions.width*dimensions.naturalHeight/dimensions.naturalWidth)<2,`Uncropped image: ${label} ${JSON.stringify(dimensions)}`);
  assert.equal(dimensions.maxHeight,'none',`No prose image clamp: ${label}`);
@@ -68,11 +68,15 @@ try{
      const target=new URL(href,base);assert((await fetch(target)).ok,`Local link: ${href}`);
      if(target.hash&&target.pathname===new URL(page.url()).pathname)assert(await page.locator(target.hash).count(),`Anchor: ${href}`);
     }
+    if(path==='/'){
+     for(const image of await page.locator('#beginning img:not(.pair-second img)').all())await checkImageFrame(image,route+' origin');
+     if((width===1440&&locale==='ru')||width===390)await page.locator('#beginning').screenshot({path:`artifacts/origin-${locale}-${width}.png`});
+    }
     for(const pair of await page.locator('[data-pair]').all()){
      const button=pair.locator('button');
      if(isArticle){await checkImageFrame(pair.locator('.pair-images > img'),route);const gap=await pair.evaluate(el=>el.querySelector('figcaption').getBoundingClientRect().top-el.querySelector('.pair-images').getBoundingClientRect().bottom);assert(gap<30,`No blank space after photograph: ${route}`);}
      await button.click();assert.equal(await button.getAttribute('aria-pressed'),'true');assert.equal(await button.locator('svg[data-icon="arrow-up-right"]').count(),1);assert(await pair.locator('.pair-second').isVisible());
-     if(isArticle)await checkImageFrame(pair.locator('.pair-second img'),route+' second');
+     if(isArticle||await pair.locator('img[src*="graduation-outtake"]').count())await checkImageFrame(pair.locator('.pair-second img'),route+' second');
      if(isArticle&&width===1440)await pair.screenshot({path:`artifacts/article-pair-${locale}.png`});
      await button.click();assert.equal(await button.getAttribute('aria-pressed'),'false');assert.equal(await button.locator('svg[data-icon="arrow-up-right"]').count(),1);assert(!await pair.locator('.pair-second').isVisible());
     }

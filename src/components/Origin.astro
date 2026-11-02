@@ -1,0 +1,88 @@
+---
+import Icon from './Icon.astro';
+import Photo from './Photo.astro';
+import PhotoPair from './PhotoPair.astro';
+import copy from '../i18n/origin.json';
+import type { Locale } from '../i18n';
+interface Props { locale:Locale; }
+const {locale}=Astro.props;
+const text=copy[locale];
+const earlyVideos=['9g-v7WGinxE','Bvl6rGsDn-A','SoTk56Auc7s'];
+const travelVideos=['xoy-ks5NtEU','FLn9T8HfdJA','hFZJrFvkLsE'];
+---
+<section class="section wrap origin" id="beginning" aria-labelledby="origin-title">
+  <div class="origin-row origin-start">
+    <figure class="origin-print origin-childhood">
+      <Photo id="childhood-computer" alt={text.childAlt}/>
+      <figcaption class="handnote">{text.childCaption}</figcaption>
+    </figure>
+    <div class="origin-copy">
+      <p class="eyebrow">{text.eyebrow}</p>
+      <h2 id="origin-title">{text.title}<br/><span class="serif">{text.accent}</span></h2>
+      {text.childhood.map(paragraph=><p>{paragraph}</p>)}
+    </div>
+  </div>
+  <div class="origin-row origin-channel">
+    <div class="origin-copy">
+      <p class="eyebrow">{text.earlyLabel}</p>
+      <h3>{text.earlyTitle}</h3>
+      {text.early.map(paragraph=><p>{paragraph}</p>)}
+      <ul class="origin-videos">{earlyVideos.map((id,index)=><li><a href={`https://youtu.be/${id}`} target="_blank" rel="noopener noreferrer"><Icon name="play"/><span>{text.earlyLinks[index]}</span><Icon name="arrow-up-right"/></a></li>)}</ul>
+    </div>
+    <figure class="origin-print origin-diploma">
+      <Photo id="graduation-diploma" alt={text.diplomaAlt} sizes="(max-width:700px) 80vw, 360px"/>
+      <figcaption class="handnote">{text.diplomaCaption}</figcaption>
+    </figure>
+  </div>
+  <div class="origin-row origin-graduation">
+    <div class="origin-friends">
+      <PhotoPair locale={locale} first="graduation-friends" second="graduation-outtake" alt={text.friendsAlt} secondAlt={text.outtakeAlt} caption={text.friendsCaption}/>
+    </div>
+    <div class="origin-copy">
+      <p class="eyebrow">{text.graduateLabel}</p>
+      <h3>{text.graduateTitle}</h3>
+      {text.graduate.map(paragraph=><p>{paragraph}</p>)}
+      <ul class="origin-videos">{travelVideos.map((id,index)=><li><a href={`https://youtu.be/${id}`} target="_blank" rel="noopener noreferrer"><Icon name="play"/><span>{text.travelLinks[index]}</span><Icon name="arrow-up-right"/></a></li>)}</ul>
+    </div>
+  </div>
+  <p class="handnote origin-note">{text.note} <Icon name="arrow-down"/></p>
+</section>
+<style>
+.origin{border-bottom:1px solid var(--line)}
+.origin-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,88px);align-items:center}
+.origin-row+.origin-row{margin-top:72px;padding-top:64px;border-top:1px solid var(--line)}
+.origin-copy{min-width:0}
+.origin-copy .eyebrow{font-size:14px;margin-bottom:18px}
+.origin-copy h2{font-size:clamp(34px,3.5vw,52px);margin-bottom:26px}
+.origin-copy h3{font-size:clamp(28px,2.5vw,38px);margin-bottom:22px;line-height:1.15}
+.origin-copy>p:not(.eyebrow){font-size:17px;line-height:1.75}
+.origin-print{position:relative;padding:14px 14px 0;background:#fffdf7;box-shadow:0 8px 24px #37312114}
+.origin-print::before{content:'';position:absolute;z-index:1;left:36%;top:-10px;width:28%;height:26px;background:#e6d5a5a6;transform:rotate(-4deg)}
+.origin-print figcaption{padding:18px 4px 20px;font-size:21px;color:var(--muted)}
+.origin-childhood{transform:rotate(-2deg)}
+.origin-diploma{max-width:350px;justify-self:center;transform:rotate(2deg)}
+.origin-friends{max-width:430px;width:100%;justify-self:center}
+.origin-friends :global(.photo-pair){padding:12px 12px 0;background:#fffdf7;box-shadow:0 8px 24px #37312114}
+.origin-friends :global(.photo-pair figcaption){flex-wrap:wrap;gap:8px;padding:16px 2px}
+.origin-friends :global(.pair-images){aspect-ratio:3/4}
+.origin-friends :global(.pair-images img){object-fit:contain}
+.origin-videos{list-style:none;padding:0;margin:24px 0 0;border-top:1px solid var(--line)}
+.origin-videos li{border-bottom:1px solid var(--line)}
+.origin-videos a{display:flex;align-items:center;gap:12px;padding:13px 0;min-height:48px;font-size:16px;line-height:1.5;transition:color .3s ease}
+.origin-videos a:hover{color:var(--orange)}
+.origin-videos a>span{flex:1}
+.origin-videos :global(.icon){flex-shrink:0}
+.origin-note{margin-top:56px;text-align:center;color:var(--orange);font-size:26px}
+@media(max-width:900px){.origin-row{gap:32px}.origin-copy>p:not(.eyebrow){font-size:16px}.origin-diploma{max-width:300px}}
+@media(max-width:700px){
+ .origin-row{grid-template-columns:minmax(0,1fr);gap:32px}
+ .origin-start .origin-copy{grid-row:1}
+ .origin-childhood{max-width:480px;justify-self:center}
+ .origin-row+.origin-row{margin-top:48px;padding-top:42px}
+ .origin-diploma{width:85%;max-width:330px}
+ .origin-graduation .origin-copy{grid-row:1}
+ .origin-friends{max-width:380px}
+ .origin-copy h2{font-size:clamp(32px,8vw,44px)}
+ .origin-note{font-size:24px;margin-top:40px}
+}
+</style>
